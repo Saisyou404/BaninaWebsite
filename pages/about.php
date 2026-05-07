@@ -25,7 +25,7 @@ $aboutText = getSetting('about_text');
             </a>
         </div>
         <div class="about-img">
-            <div style="background:linear-gradient(135deg,var(--black),var(--black-light));border-radius:14px;height:420px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:5rem;border:1px solid rgba(201,151,42,0.3)">
+            <div style="background:linear-gradient(135deg,var(--black),var(--black-light));border-radius:14px;height:420px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:5rem;border:1px solid rgba(122,140,42,0.3)">
                 <i class="fas fa-store"></i>
             </div>
         </div>
@@ -66,7 +66,7 @@ $aboutText = getSetting('about_text');
 </div>
 
 <!-- Stats -->
-<div style="background:var(--black);padding:4rem 0;border-bottom:1px solid rgba(201,151,42,0.2)">
+<div style="background:var(--black);padding:4rem 0;border-bottom:1px solid rgba(122,140,42,0.2)">
     <div class="container">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;text-align:center">
             <div class="fade-in">

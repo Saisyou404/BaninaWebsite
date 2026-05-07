@@ -96,10 +96,9 @@ include __DIR__ . '/../includes/header.php';
                 <div class="detail-desc"><?= nl2br(sanitize($product['description'])) ?></div>
                 <?php endif; ?>
 
-                <a href="https://wa.me/<?= sanitize($whatsapp) ?>?text=<?= $waMsg ?>"
-                   class="detail-wa-btn" target="_blank">
-                    <i class="fab fa-whatsapp"></i> Pesan via WhatsApp
-                </a>
+                <a href="https://id.shp.ee/y9timn2w" class="detail-wa-btn shopee-btn" target="_blank" rel="noopener">
+                        <i class="fas fa-shopping-bag"></i> Beli di Shopee
+                    </a>
 
                 <p style="font-size:0.78rem;color:var(--text-light);margin-top:1rem;text-align:center">
                     <i class="fas fa-shield-alt"></i> Klik tombol di atas untuk menghubungi kami langsung
@@ -143,8 +142,8 @@ include __DIR__ . '/../includes/header.php';
                     </div>
                 </a>
                 <div style="padding:0 1.25rem 1.25rem">
-                    <a href="https://wa.me/<?= sanitize($whatsapp) ?>?text=<?= $rWaMsg ?>" class="product-wa-btn" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Tanya via WhatsApp
+                    <a href="https://id.shp.ee/y9timn2w" class="product-wa-btn shopee-btn" target="_blank" rel="noopener">
+                        <i class="fas fa-shopping-bag"></i> Beli di Shopee
                     </a>
                 </div>
             </div>

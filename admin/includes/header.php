@@ -19,9 +19,9 @@ $currentFile = basename($_SERVER['PHP_SELF']);
             --black:     #0a0a0a;
             --black-mid: #141414;
             --black-light: #1e1e1e;
-            --gold:      #c9972a;
-            --gold-light: #e8b84b;
-            --gold-dim:  rgba(201,151,42,0.15);
+            --gold:      #7a8c2a !important;
+            --gold-light: #9aad3a !important;
+            --gold-dim:  rgba(122,140,42,0.15);
             --border:    #2e2e2e;
             --bg:        #f7f5f2;
             --white:     #fff;
@@ -113,7 +113,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
         .stat-card { background: #fff; border-radius: 12px; padding: 1.25rem; border: 1px solid #e8e4dc; display: flex; align-items: center; gap: 1rem; }
         .stat-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
         .stat-icon.black { background: rgba(10,10,10,0.08); color: var(--black); }
-        .stat-icon.gold { background: rgba(201,151,42,0.1); color: var(--gold); }
+        .stat-icon.gold { background: rgba(122,140,42,0.1); color: var(--gold); }
         .stat-icon.green { background: rgba(22,163,74,0.1); color: var(--success); }
         .stat-icon.blue { background: rgba(37,99,235,0.1); color: var(--info); }
         .stat-number { font-size: 1.6rem; font-weight: 700; color: var(--black); line-height: 1; }
@@ -133,7 +133,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
         .badge { display:inline-block;padding:0.25rem 0.6rem;border-radius:50px;font-size:0.7rem;font-weight:600;letter-spacing:0.04em; }
         .badge-success { background:#dcfce7;color:#15803d; }
         .badge-danger { background:#fee2e2;color:#b91c1c; }
-        .badge-gold { background:rgba(201,151,42,0.12);color:#92690f; }
+        .badge-gold { background:rgba(122,140,42,0.12);color:#5a6e10; }
 
         /* FORMS */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }

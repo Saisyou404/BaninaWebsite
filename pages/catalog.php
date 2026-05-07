@@ -111,9 +111,8 @@ include __DIR__ . '/../includes/header.php';
                     </div>
                 </a>
                 <div style="padding:0 1.25rem 1.25rem">
-                    <a href="https://wa.me/<?= sanitize($whatsapp) ?>?text=<?= $waMsg ?>"
-                       class="product-wa-btn" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Tanya via WhatsApp
+                    <a href="https://id.shp.ee/y9timn2w" class="product-wa-btn shopee-btn" target="_blank" rel="noopener">
+                        <i class="fas fa-shopping-bag"></i> Beli di Shopee
                     </a>
                 </div>
             </div>
