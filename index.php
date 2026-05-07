@@ -312,33 +312,38 @@ include __DIR__ . '/includes/header.php';
 <section class="hero-elegant">
 
     <?php if (!empty($banners)): ?>
+        <!-- Hanya gambar yang slide -->
         <?php foreach ($banners as $i => $banner): ?>
         <div class="hero-slide-elegant <?= $i === 0 ? 'active' : '' ?>" data-index="<?= $i ?>">
             <img src="<?= UPLOAD_URL . sanitize($banner['image']) ?>" alt="<?= sanitize($banner['title']) ?>">
-            <div class="hero-overlay-elegant"></div>
-            <div class="hero-content-elegant">
-                <div class="container">
-                    <div class="hero-eyebrow">
-                        <div class="hero-eyebrow-line"></div>
-                        <span class="hero-eyebrow-text">Men Wear Since 2019</span>
-                    </div>
-                    <h1 class="hero-title-elegant">
-                        <?= sanitize($heroTitle) ?>
-                        <em>BANINA</em>
-                    </h1>
-                    <p class="hero-subtitle-elegant"><?= sanitize($heroSubtitle) ?></p>
-                    <div class="hero-actions-elegant">
-                        <a href="<?= SITE_URL ?>/pages/catalog.php" class="btn-hero-primary">
-                            <i class="fas fa-th-large"></i> Lihat Koleksi
-                        </a>
-                        <a href="https://wa.me/<?= sanitize($whatsapp) ?>" class="btn-hero-outline" target="_blank">
-                            <i class="fab fa-whatsapp"></i> Tanya via WA
-                        </a>
-                    </div>
+        </div>
+        <?php endforeach; ?>
+
+        <!-- Overlay tetap diam -->
+        <div class="hero-overlay-elegant"></div>
+
+        <!-- Teks & tombol tetap diam, tidak ikut slide -->
+        <div class="hero-content-elegant">
+            <div class="container">
+                <div class="hero-eyebrow" style="opacity:1;transform:none">
+                    <div class="hero-eyebrow-line"></div>
+                    <span class="hero-eyebrow-text">Men Wear Since 2019</span>
+                </div>
+                <h1 class="hero-title-elegant" style="opacity:1;transform:none">
+                    <?= sanitize($heroTitle) ?>
+                    <em>BANINA</em>
+                </h1>
+                <p class="hero-subtitle-elegant" style="opacity:1;transform:none"><?= sanitize($heroSubtitle) ?></p>
+                <div class="hero-actions-elegant" style="opacity:1;transform:none">
+                    <a href="<?= SITE_URL ?>/pages/catalog.php" class="btn-hero-primary">
+                        <i class="fas fa-th-large"></i> Lihat Koleksi
+                    </a>
+                    <a href="https://wa.me/<?= sanitize($whatsapp) ?>" class="btn-hero-outline" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Tanya via WA
+                    </a>
                 </div>
             </div>
         </div>
-        <?php endforeach; ?>
 
         <?php if (count($banners) > 1): ?>
         <div class="hero-nav">
@@ -420,41 +425,6 @@ include __DIR__ . '/includes/header.php';
 })();
 </script>
 
-<!-- ===== CATEGORIES SECTION ===== -->
-<?php if (!empty($categories)): ?>
-<section class="section">
-    <div class="container">
-        <div class="section-header fade-in">
-            <span class="section-label">Koleksi BANINA</span>
-            <h2 class="section-title">Jelajahi Kategori</h2>
-            <div class="divider"><span class="divider-icon">✦</span></div>
-            <p class="section-subtitle">Temukan berbagai koleksi busana muslim pria pilihan dengan kualitas premium</p>
-        </div>
-        <div class="categories-grid">
-            <?php foreach ($categories as $cat): ?>
-            <a href="<?= SITE_URL ?>/pages/catalog.php?category=<?= $cat['slug'] ?>" class="category-card fade-in">
-                <?php if (!empty($cat['image'])): ?>
-                <img src="<?= UPLOAD_URL . sanitize($cat['image']) ?>" alt="<?= sanitize($cat['name']) ?>">
-                <?php else: ?>
-                <div class="cat-placeholder">
-                    <?php
-                    $icons = ['songkok'=>'fa-hat-cowboy','kemeja'=>'fa-shirt','sarung'=>'fa-scroll','celana'=>'fa-person','sajadah'=>'fa-mosque'];
-                    $icon = $icons[$cat['slug']] ?? 'fa-tshirt';
-                    ?>
-                    <i class="fas <?= $icon ?>"></i>
-                </div>
-                <?php endif; ?>
-                <div class="category-overlay">
-                    <div class="category-name"><?= sanitize($cat['name']) ?></div>
-                    <div class="category-count"><?= (int)($cat['product_count'] ?? 0) ?> Produk</div>
-                </div>
-            </a>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-
 <!-- ===== FEATURED PRODUCTS ===== -->
 <?php if (!empty($featured)): ?>
 <section class="section section-bg-dark">
@@ -503,6 +473,49 @@ include __DIR__ . '/includes/header.php';
             <a href="<?= SITE_URL ?>/pages/catalog.php" class="btn-primary">
                 Lihat Semua Produk <i class="fas fa-arrow-right"></i>
             </a>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
+<!-- ===== CATEGORIES CIRCLE ===== -->
+<?php if (!empty($categories)): ?>
+<section class="section">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">Koleksi BANINA</span>
+            <h2 class="section-title">Jelajahi Kategori</h2>
+            <div class="divider"><span class="divider-icon">✦</span></div>
+            <p class="section-subtitle">Pilih kategori untuk menemukan koleksi busana muslim pria pilihan</p>
+        </div>
+
+        <!-- Tombol Tampilkan Semua -->
+        <div style="text-align:center;margin-bottom:2rem" class="fade-in">
+            <a href="<?= SITE_URL ?>/pages/catalog.php" class="btn-cat-all active-cat" id="btnTampilSemua">
+                Tampilkan Semua
+            </a>
+        </div>
+
+        <!-- Circle Category Row -->
+        <div class="cat-circle-row fade-in">
+            <?php
+            $icons = ['songkok'=>'fa-hat-cowboy','kemeja'=>'fa-shirt','sarung'=>'fa-scroll','celana'=>'fa-person','sajadah'=>'fa-mosque'];
+            foreach ($categories as $cat):
+                $icon = $icons[$cat['slug']] ?? 'fa-tshirt';
+            ?>
+            <a href="<?= SITE_URL ?>/pages/catalog.php?category=<?= $cat['slug'] ?>" class="cat-circle-item">
+                <div class="cat-circle-img">
+                    <?php if (!empty($cat['image'])): ?>
+                    <img src="<?= UPLOAD_URL . sanitize($cat['image']) ?>" alt="<?= sanitize($cat['name']) ?>">
+                    <?php else: ?>
+                    <div class="cat-circle-placeholder">
+                        <i class="fas <?= $icon ?>"></i>
+                    </div>
+                    <?php endif; ?>
+                </div>
+                <span class="cat-circle-label"><?= strtoupper(sanitize($cat['name'])) ?></span>
+            </a>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>

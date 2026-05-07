@@ -96,3 +96,39 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3500);
     });
 });
+
+    // ---- Accordion (global, for pages that don't have inline script) ----
+    document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const item = trigger.closest('.accordion-item');
+            const isOpen = item.classList.contains('open');
+            item.closest('.accordion-wrap')?.querySelectorAll('.accordion-item')
+                .forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        });
+    });
+
+    // ---- Tab Switcher (global) ----
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.dataset.tab;
+            btn.closest('.tab-switcher').querySelectorAll('.tab-btn')
+                .forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            btn.closest('.tab-switcher').querySelectorAll('.tab-panel')
+                .forEach(p => p.classList.remove('active'));
+            document.getElementById(target)?.classList.add('active');
+        });
+    });
+
+    // ---- FAQ Category Tabs (global) ----
+    document.querySelectorAll('.faq-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.faq-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.accordion-wrap[id^="faq-"]')
+                .forEach(w => w.style.display = 'none');
+            const target = document.getElementById('faq-' + btn.dataset.faq);
+            if (target) target.style.display = 'flex';
+        });
+    });
