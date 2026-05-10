@@ -6,7 +6,7 @@ $slug = $_GET['slug'] ?? '';
 if (!$slug) redirect(SITE_URL . '/pages/catalog.php');
 
 $product = $db->prepare("
-    SELECT p.*, c.name as cat_name, c.slug as cat_slug
+    SELECT p.*, c.name as cat_name, c.slug as cat_slug, c.size_chart as cat_size_chart
     FROM products p
     LEFT JOIN categories c ON c.id = p.category_id
     WHERE p.slug = ? AND p.is_active = 1
@@ -31,11 +31,53 @@ $related->execute([$product['category_id'], $product['id']]);
 $related = $related->fetchAll();
 
 $whatsapp = getSetting('whatsapp_number');
-$waMsg = urlencode($product['whatsapp_message'] ?: 'Halo BANINA, saya tertarik dengan produk ' . $product['name']);
 $mainImg = $images ? $images[0]['image'] : null;
 
 include __DIR__ . '/../includes/header.php';
 ?>
+
+<style>
+/* Size Chart */
+.size-chart-wrap { margin-top: 1.5rem; }
+.size-chart-title {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.88rem; font-weight: 600; color: var(--black);
+    cursor: pointer; padding: 0.75rem 1rem;
+    background: #f8f4ec; border: 1px solid #e8e0d0;
+    border-radius: 8px; user-select: none;
+    transition: all 0.2s;
+}
+.size-chart-title:hover { border-color: var(--gold); }
+.size-chart-title i.arrow { margin-left: auto; transition: transform 0.3s; color: var(--gold); }
+.size-chart-title.open i.arrow { transform: rotate(180deg); }
+.size-chart-body {
+    display: none;
+    border: 1px solid #e8e0d0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+}
+.size-chart-body.open { display: block; }
+.size-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.size-table th {
+    background: var(--black); color: var(--gold);
+    padding: 0.6rem 0.75rem; text-align: center;
+    font-weight: 600; letter-spacing: 0.05em;
+    font-size: 0.78rem; text-transform: uppercase;
+}
+.size-table td {
+    padding: 0.55rem 0.75rem; text-align: center;
+    border-bottom: 1px solid #f0ece4; color: var(--text-mid);
+}
+.size-table tr:last-child td { border-bottom: none; }
+.size-table tr:hover td { background: #faf7f2; }
+.size-table td:first-child { font-weight: 700; color: var(--black); }
+.size-note {
+    padding: 0.75rem 1rem; font-size: 0.78rem;
+    color: var(--text-light); background: #faf7f2;
+    border-top: 1px solid #f0ece4;
+}
+</style>
 
 <div class="product-detail">
     <div class="container">
@@ -83,11 +125,9 @@ include __DIR__ . '/../includes/header.php';
 
                 <h1><?= sanitize($product['name']) ?></h1>
 
+                <!-- HARGA TUNGGAL -->
                 <div class="detail-price">
                     <?= formatPrice($product['price_min']) ?>
-                    <?php if ($product['price_max'] > $product['price_min']): ?>
-                    <span style="font-size:1.1rem;color:var(--text-light);font-weight:400"> – <?= formatPrice($product['price_max']) ?></span>
-                    <?php endif; ?>
                 </div>
 
                 <div class="detail-divider"></div>
@@ -96,13 +136,58 @@ include __DIR__ . '/../includes/header.php';
                 <div class="detail-desc"><?= nl2br(sanitize($product['description'])) ?></div>
                 <?php endif; ?>
 
-                <a href="https://id.shp.ee/y9timn2w" class="detail-wa-btn shopee-btn" target="_blank" rel="noopener">
+                <!-- SIZE CHART -->
+                <?php
+                $sizeChart = $product['cat_size_chart'] ?? '';
+                $sizes = [];
+                if ($sizeChart) {
+                    foreach (explode("\n", trim($sizeChart)) as $line) {
+                        $parts = array_map('trim', explode('|', $line));
+                        if (count($parts) >= 2) $sizes[] = $parts;
+                    }
+                }
+                ?>
+                <?php if (!empty($sizes)): ?>
+                <div class="size-chart-wrap">
+                    <div class="size-chart-title" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+                        <i class="fas fa-ruler-combined" style="color:var(--gold)"></i>
+                        Tabel Ukuran
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    <div class="size-chart-body">
+                        <table class="size-table">
+                            <thead>
+                                <tr>
+                                    <th>Ukuran</th>
+                                    <th>Lingkar Dada</th>
+                                    <th>Panjang Baju</th>
+                                    <th>Lebar Bahu</th>
+                                    <th>Panjang Lengan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($sizes as $row): ?>
+                                <tr>
+                                    <?php foreach ($row as $cell): ?>
+                                    <td><?= sanitize($cell) ?></td>
+                                    <?php endforeach; ?>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <div class="size-note">
+                            <i class="fas fa-info-circle" style="color:var(--gold)"></i>
+                            Ukuran dalam sentimeter (cm). Toleransi ±1-2 cm.
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <div style="margin-top:1.5rem">
+                    <a href="https://id.shp.ee/y9timn2w" class="detail-wa-btn shopee-btn" target="_blank" rel="noopener">
                         <i class="fas fa-shopping-bag"></i> Beli di Shopee
                     </a>
-
-                <p style="font-size:0.78rem;color:var(--text-light);margin-top:1rem;text-align:center">
-                    <i class="fas fa-shield-alt"></i> Klik tombol di atas untuk menghubungi kami langsung
-                </p>
+                </div>
             </div>
         </div>
     </div>
@@ -120,7 +205,6 @@ include __DIR__ . '/../includes/header.php';
         <div class="products-grid">
             <?php foreach ($related as $prod):
                 $rImg = $prod['primary_image'] ?: $prod['first_image'];
-                $rWaMsg = urlencode('Halo BANINA, saya tertarik dengan produk ' . $prod['name']);
             ?>
             <div class="product-card fade-in">
                 <a href="<?= SITE_URL ?>/pages/product.php?slug=<?= $prod['slug'] ?>" style="text-decoration:none;color:inherit;display:contents">
@@ -133,12 +217,7 @@ include __DIR__ . '/../includes/header.php';
                     </div>
                     <div class="product-info">
                         <div class="product-name"><?= sanitize($prod['name']) ?></div>
-                        <div class="product-price">
-                            <?= formatPrice($prod['price_min']) ?>
-                            <?php if ($prod['price_max'] > $prod['price_min']): ?>
-                            <span>– <?= formatPrice($prod['price_max']) ?></span>
-                            <?php endif; ?>
-                        </div>
+                        <div class="product-price"><?= formatPrice($prod['price_min']) ?></div>
                     </div>
                 </a>
                 <div style="padding:0 1.25rem 1.25rem">

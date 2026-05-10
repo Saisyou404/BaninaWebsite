@@ -95,9 +95,8 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => alert.remove(), 400);
         }, 3500);
     });
-});
 
-    // ---- Accordion (global, for pages that don't have inline script) ----
+    // ---- Accordion ----
     document.querySelectorAll('.accordion-trigger').forEach(trigger => {
         trigger.addEventListener('click', () => {
             const item = trigger.closest('.accordion-item');
@@ -108,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ---- Tab Switcher (global) ----
+    // ---- Tab Switcher ----
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const target = btn.dataset.tab;
@@ -121,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ---- FAQ Category Tabs (global) ----
+    // ---- FAQ Category Tabs ----
     document.querySelectorAll('.faq-tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.faq-tab-btn').forEach(b => b.classList.remove('active'));
@@ -132,3 +131,5 @@ document.addEventListener('DOMContentLoaded', function () {
             if (target) target.style.display = 'flex';
         });
     });
+
+});

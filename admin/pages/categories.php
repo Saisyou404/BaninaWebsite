@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $desc = trim($_POST['description'] ?? '');
     $sort = (int)($_POST['sort_order'] ?? 0);
+    $sizeChart = trim($_POST['size_chart'] ?? '');
     if (!$name) $errors[] = 'Nama kategori wajib diisi.';
 
     $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name), '-'));
@@ -45,15 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($imgPath) {
                 $old = $db->query("SELECT image FROM categories WHERE id=$id")->fetchColumn();
                 if ($old) { $f=UPLOAD_PATH.$old; if(file_exists($f)) unlink($f); }
-                $db->prepare("UPDATE categories SET name=?,slug=?,description=?,image=?,sort_order=? WHERE id=?")
-                   ->execute([$name,$slug,$desc,$imgPath,$sort,$id]);
+                $db->prepare("UPDATE categories SET name=?,slug=?,description=?,image=?,sort_order=?,size_chart=? WHERE id=?")
+                   ->execute([$name,$slug,$desc,$imgPath,$sort,$sizeChart,$id]);
             } else {
-                $db->prepare("UPDATE categories SET name=?,slug=?,description=?,sort_order=? WHERE id=?")
-                   ->execute([$name,$slug,$desc,$sort,$id]);
+                $db->prepare("UPDATE categories SET name=?,slug=?,description=?,sort_order=?,size_chart=? WHERE id=?")
+                   ->execute([$name,$slug,$desc,$sort,$sizeChart,$id]);
             }
         } else {
-            $db->prepare("INSERT INTO categories (name,slug,description,image,sort_order) VALUES (?,?,?,?,?)")
-               ->execute([$name,$slug,$desc,$imgPath,$sort]);
+            $db->prepare("INSERT INTO categories (name,slug,description,image,sort_order,size_chart) VALUES (?,?,?,?,?,?)")
+               ->execute([$name,$slug,$desc,$imgPath,$sort,$sizeChart]);
         }
         redirect(SITE_URL . '/admin/pages/categories.php?msg=saved');
     }
@@ -87,6 +88,11 @@ $msg = $_GET['msg'] ?? '';
                 <div class="form-group">
                     <label>Deskripsi</label>
                     <textarea name="description" rows="3"><?= sanitize($editing['description'] ?? '') ?></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tabel Ukuran (Size Chart)</label>
+                    <textarea name="size_chart" rows="7" placeholder="S|92|68|42|58&#10;M|96|70|44|59&#10;L|100|72|46|60&#10;XL|104|74|48|61&#10;XXL|108|76|50|62"><?= sanitize($editing['size_chart'] ?? '') ?></textarea>
+                    <p class="form-hint" style="font-size:0.75rem;color:var(--text-light);margin-top:0.3rem">Format: <strong>Ukuran|LingkarDada|PanjangBaju|LebarBahu|PanjangLengan</strong> — satu baris per ukuran</p>
                 </div>
                 <div class="form-group">
                     <label>Urutan Tampil</label>

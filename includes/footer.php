@@ -1,7 +1,6 @@
 <?php
 $siteName = getSetting('site_name');
 $instagram = getSetting('instagram');
-$facebook = getSetting('facebook');
 $whatsapp = getSetting('whatsapp_number');
 $address = getSetting('address');
 $email = getSetting('email');
@@ -27,9 +26,6 @@ $categories = $db->query("SELECT * FROM categories WHERE is_active=1 ORDER BY so
                 <div class="social-links">
                     <?php if ($instagram): ?>
                     <a href="https://instagram.com/<?= ltrim(sanitize($instagram), '@') ?>" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                    <?php endif; ?>
-                    <?php if ($facebook): ?>
-                    <a href="https://facebook.com/<?= sanitize($facebook) ?>" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
                     <?php endif; ?>
                     <?php if ($shopee): ?>
                     <a href="<?= sanitize($shopee) ?>" target="_blank" title="Shopee"><i class="fas fa-store"></i></a>

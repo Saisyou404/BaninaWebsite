@@ -71,9 +71,13 @@ $waGreeting = getSetting('whatsapp_greeting');
         </div>
 
         <div class="fade-in">
-            <div class="map-placeholder">
-                <i class="fas fa-map-marker-alt"></i>
-                <p><?= sanitize($address ?: 'Yogyakarta, Indonesia') ?></p>
+            <div style="border-radius:14px;overflow:hidden;border:1px solid var(--border-gold);box-shadow:0 8px 30px rgba(0,0,0,0.12);">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.8868329685765!2d109.99815120000001!3d-7.695292600000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7aebeb6e5742c3%3A0xb31736b1a63696b9!2sOutlet%20Banina!5e0!3m2!1sid!2sid!4v1778405942350!5m2!1sid!2sid"
+                    width="100%" height="380" style="border:0;display:block;" 
+                    allowfullscreen="" loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
             </div>
 
             <div style="margin-top:2rem;background:var(--cream);border-radius:14px;padding:2rem;border:1px solid #e8e0d0">

@@ -753,10 +753,11 @@ body {
 
 /* ---- SHOPEE BUTTON ---- */
 .shopee-btn {
-    background: linear-gradient(135deg, #ee4d2d, #ff6633) !important;
+    background: linear-gradient(135deg, #7a8c2a, #9aad3a) !important;
     color: #fff !important;
 }
 .shopee-btn:hover {
+    background: linear-gradient(135deg, #9aad3a, #7a8c2a) !important;
     opacity: 0.9;
     transform: translateY(-1px);
 }

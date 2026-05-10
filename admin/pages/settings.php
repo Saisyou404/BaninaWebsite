@@ -8,7 +8,7 @@ $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fields = [
         'site_name', 'site_tagline', 'site_description', 'whatsapp_number',
-        'whatsapp_greeting', 'address', 'email', 'instagram', 'facebook',
+        'whatsapp_greeting', 'address', 'email', 'instagram',
         'shopee', 'about_text', 'hero_title', 'hero_subtitle'
     ];
     foreach ($fields as $key) {
@@ -90,10 +90,6 @@ require_once __DIR__ . '/../includes/header.php';
                     <div class="form-group">
                         <label>Instagram</label>
                         <input type="text" name="instagram" value="<?= sanitize(getSetting('instagram')) ?>" placeholder="@banina.fact">
-                    </div>
-                    <div class="form-group">
-                        <label>Facebook</label>
-                        <input type="text" name="facebook" value="<?= sanitize(getSetting('facebook')) ?>">
                     </div>
                     <div class="form-group">
                         <label>Link Shopee</label>

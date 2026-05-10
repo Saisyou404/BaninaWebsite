@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $catId    = (int)($_POST['category_id'] ?? 0);
     $desc     = trim($_POST['description'] ?? '');
     $priceMin = (float)($_POST['price_min'] ?? 0);
-    $priceMax = (float)($_POST['price_max'] ?? 0);
+    $priceMax = $priceMin;
     $waMsg    = trim($_POST['whatsapp_message'] ?? '');
     $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
     $isActive   = isset($_POST['is_active']) ? 1 : 0;
@@ -131,13 +131,8 @@ $msg = $_GET['msg'] ?? '';
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Harga Minimum (Rp)</label>
+                            <label>Harga (Rp)</label>
                             <input type="number" name="price_min" value="<?= $product['price_min'] ?? 0 ?>" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label>Harga Maksimum (Rp)</label>
-                            <input type="number" name="price_max" value="<?= $product['price_max'] ?? 0 ?>" min="0">
-                            <p class="form-hint">Kosongkan atau sama dengan minimum jika harga tunggal</p>
                         </div>
                         <div class="form-group full">
                             <label>Deskripsi Produk</label>
