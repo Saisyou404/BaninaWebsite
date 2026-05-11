@@ -644,21 +644,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeBtn = document.getElementById('close-popup');
 
     if (popup) {
-        // Show popup after page loads
-        setTimeout(function() {
-            popup.classList.add('show');
-        }, 1000); // Delay 1 second
+        // Hanya tampilkan jika belum ditutup di sesi ini
+        if (!sessionStorage.getItem('popup_closed')) {
+            setTimeout(function() {
+                popup.classList.add('show');
+            }, 1000);
+        }
+
+        function closePopup() {
+            popup.classList.remove('show');
+            sessionStorage.setItem('popup_closed', '1');
+        }
 
         // Close popup when X is clicked
-        closeBtn.addEventListener('click', function() {
-            popup.classList.remove('show');
-        });
+        closeBtn.addEventListener('click', closePopup);
 
         // Close popup when clicking outside
         popup.addEventListener('click', function(e) {
-            if (e.target === popup) {
-                popup.classList.remove('show');
-            }
+            if (e.target === popup) closePopup();
         });
     }
 });

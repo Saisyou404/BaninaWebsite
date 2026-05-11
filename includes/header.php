@@ -47,6 +47,10 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <a href="<?= SITE_URL ?>/index.php" class="logo-wrap">
             <?php if ($logo): ?>
                 <img src="<?= UPLOAD_URL . sanitize($logo) ?>" alt="<?= sanitize($siteName) ?>" class="logo-img">
+                <div class="logo-text">
+                    <span class="logo-main"><?= sanitize($siteName) ?></span>
+                    <span class="logo-sub"><?= sanitize($siteTagline) ?></span>
+                </div>
             <?php else: ?>
                 <div class="logo-text">
                     <span class="logo-main"><?= sanitize($siteName) ?></span>
