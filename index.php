@@ -568,4 +568,100 @@ include __DIR__ . '/includes/header.php';
     </div>
 </section>
 
+<!-- ===== POP-UP BANNER ===== -->
+<?php
+$popupBanners = $db->query("SELECT * FROM popup_banners WHERE is_active=1 ORDER BY created_at DESC LIMIT 1")->fetchAll();
+if (!empty($popupBanners)):
+?>
+<div id="popup-banner" class="popup-banner">
+    <div class="popup-content">
+        <img src="<?= UPLOAD_URL . sanitize($popupBanners[0]['image']) ?>" alt="Promo Banner">
+        <button id="close-popup" class="close-popup-btn">✕</button>
+    </div>
+</div>
+<?php endif; ?>
+
+<style>
+.popup-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.popup-banner.show {
+    opacity: 1;
+    visibility: visible;
+}
+.popup-content {
+    position: relative;
+    max-width: 400px;
+    max-height: 80vh;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.popup-content img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.close-popup-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease;
+}
+.close-popup-btn:hover {
+    background: rgba(0, 0, 0, 1);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const popup = document.getElementById('popup-banner');
+    const closeBtn = document.getElementById('close-popup');
+
+    if (popup) {
+        // Show popup after page loads
+        setTimeout(function() {
+            popup.classList.add('show');
+        }, 1000); // Delay 1 second
+
+        // Close popup when X is clicked
+        closeBtn.addEventListener('click', function() {
+            popup.classList.remove('show');
+        });
+
+        // Close popup when clicking outside
+        popup.addEventListener('click', function(e) {
+            if (e.target === popup) {
+                popup.classList.remove('show');
+            }
+        });
+    }
+});
+</script>
+
 <?php include __DIR__ . '/includes/footer.php'; ?>

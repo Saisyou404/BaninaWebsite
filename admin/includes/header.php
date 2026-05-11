@@ -209,7 +209,10 @@ $currentFile = basename($_SERVER['PHP_SELF']);
 
         <div class="nav-section-title">Konten</div>
         <a href="<?= SITE_URL ?>/admin/pages/banners.php" class="<?= $currentFile==='banners.php'?'active':'' ?>">
-            <i class="fas fa-images"></i> Banner
+            <i class="fas fa-images"></i> Banner Hero
+        </a>
+        <a href="<?= SITE_URL ?>/admin/pages/popup-banners.php" class="<?= $currentFile==='popup-banners.php'?'active':'' ?>">
+            <i class="fas fa-ad"></i> Banner Pop-up
         </a>
         <a href="<?= SITE_URL ?>/admin/pages/categories.php" class="<?= $currentFile==='categories.php'?'active':'' ?>">
             <i class="fas fa-tags"></i> Kategori

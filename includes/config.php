@@ -6,7 +6,7 @@ define('DB_PASS', '');
 define('DB_NAME', 'banina_store');
 
 // Konfigurasi Aplikasi
-define('SITE_URL', 'http://localhost/banina-website');
+define('SITE_URL', 'http://localhost:8000');
 define('UPLOAD_PATH', __DIR__ . '/../assets/images/uploads/');
 define('UPLOAD_URL', SITE_URL . '/assets/images/uploads/');
 
