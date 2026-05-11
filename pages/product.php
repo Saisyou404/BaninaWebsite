@@ -19,6 +19,10 @@ $images = $db->prepare("SELECT * FROM product_images WHERE product_id = ? ORDER 
 $images->execute([$product['id']]);
 $images = $images->fetchAll();
 
+$variants = $db->prepare("SELECT * FROM product_variants WHERE product_id = ? AND is_active = 1 ORDER BY sort_order ASC");
+$variants->execute([$product['id']]);
+$variants = $variants->fetchAll();
+
 $related = $db->prepare("
     SELECT p.*,
         (SELECT image FROM product_images WHERE product_id=p.id AND is_primary=1 LIMIT 1) as primary_image,
@@ -92,9 +96,43 @@ include __DIR__ . '/../includes/header.php';
 
                 <div class="detail-divider"></div>
 
+                <!-- Deskripsi Produk -->
                 <?php if ($product['description']): ?>
-                <div class="detail-desc"><?= nl2br(sanitize($product['description'])) ?></div>
+                <div class="detail-section">
+                    <h3 class="detail-subtitle">Deskripsi Produk</h3>
+                    <div class="detail-desc"><?= nl2br(sanitize($product['description'])) ?></div>
+                </div>
                 <?php endif; ?>
+
+                <!-- Pilih Ukuran -->
+                <?php if (!empty($variants)): ?>
+                <div class="detail-section">
+                    <h3 class="detail-subtitle">Pilih Ukuran</h3>
+                    <div class="size-options">
+                        <?php foreach ($variants as $variant): ?>
+                        <button class="size-btn" data-size="<?= sanitize($variant['size']) ?>">
+                            <?= sanitize($variant['size']) ?>
+                        </button>
+                        <?php endforeach; ?>
+                    </div>
+                    <input type="hidden" id="selectedSize" value="">
+                    <span id="sizeError" style="display:none;color:var(--danger);font-size:0.85rem;margin-top:0.5rem;display:block"></span>
+                </div>
+                <?php endif; ?>
+
+                <!-- Jumlah Pembelian -->
+                <div class="detail-section">
+                    <h3 class="detail-subtitle">Jumlah Pembelian</h3>
+                    <div class="quantity-selector">
+                        <button class="qty-btn qty-minus" id="qtyMinus">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" id="quantity" value="1" min="1" class="qty-input" readonly>
+                        <button class="qty-btn qty-plus" id="qtyPlus">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
 
                 <a href="https://id.shp.ee/y9timn2w" class="detail-wa-btn shopee-btn" target="_blank" rel="noopener">
                         <i class="fas fa-shopping-bag"></i> Beli di Shopee
@@ -152,5 +190,76 @@ include __DIR__ . '/../includes/header.php';
     </div>
 </section>
 <?php endif; ?>
+
+<script>
+// Size Selector
+document.querySelectorAll('.size-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('selectedSize').value = this.dataset.size;
+        document.getElementById('sizeError').style.display = 'none';
+
+        // Update stock info
+        updateStockInfo(this.dataset.size);
+    });
+});
+
+// Quantity Selector
+const qtyInput = document.getElementById('quantity');
+const qtyPlus = document.getElementById('qtyPlus');
+const qtyMinus = document.getElementById('qtyMinus');
+
+if (qtyPlus && qtyMinus && qtyInput) {
+    qtyPlus.addEventListener('click', (e) => {
+        e.preventDefault();
+        qtyInput.value = parseInt(qtyInput.value) + 1;
+    });
+
+    qtyMinus.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (parseInt(qtyInput.value) > 1) {
+            qtyInput.value = parseInt(qtyInput.value) - 1;
+        }
+    });
+
+    // Allow keyboard input
+    qtyInput.addEventListener('change', function() {
+        if (this.value < 1) this.value = 1;
+    });
+}
+
+// Function to update stock information
+function updateStockInfo(selectedSize) {
+    const stockInfo = document.getElementById('stockInfo');
+    const stockData = {
+        'S': 'Stok tersedia: 15 pcs',
+        'M': 'Stok tersedia: 23 pcs',
+        'L': 'Stok tersedia: 18 pcs',
+        'XL': 'Stok tersedia: 12 pcs',
+        'XXL': 'Stok tersedia: 8 pcs',
+        'STANDAR': 'Stok tersedia: 25 pcs',
+        'PANJANG': 'Stok tersedia: 15 pcs',
+        '28': 'Stok tersedia: 10 pcs',
+        '29': 'Stok tersedia: 12 pcs',
+        '30': 'Stok tersedia: 15 pcs',
+        '31': 'Stok tersedia: 18 pcs',
+        '32': 'Stok tersedia: 20 pcs',
+        '33': 'Stok tersedia: 14 pcs',
+        '34': 'Stok tersedia: 8 pcs'
+    };
+
+    if (stockData[selectedSize]) {
+        stockInfo.innerHTML = '<i class="fas fa-check-circle"></i> ' + stockData[selectedSize];
+        stockInfo.style.color = 'var(--success)';
+        stockInfo.style.opacity = '1';
+    } else {
+        stockInfo.innerHTML = '<i class="fas fa-info-circle"></i> Pilih ukuran untuk melihat ketersediaan stok';
+        stockInfo.style.color = 'var(--text-light)';
+        stockInfo.style.opacity = '0.7';
+    }
+}
+</script>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>

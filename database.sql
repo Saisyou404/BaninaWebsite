@@ -74,6 +74,19 @@ CREATE TABLE IF NOT EXISTS banners (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Tabel Variant Produk (Ukuran)
+CREATE TABLE IF NOT EXISTS product_variants (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    size VARCHAR(50) NOT NULL,
+    sku VARCHAR(100),
+    sort_order INT DEFAULT 0,
+    is_active TINYINT(1) DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_product_size (product_id, size)
+);
+
 -- =============================================
 -- DATA AWAL (Seed Data)
 -- =============================================
@@ -117,3 +130,44 @@ INSERT INTO products (category_id, name, slug, description, price_min, price_max
 (3, 'Sarung Polosan Eksklusif', 'sarung-polosan-eksklusif', 'Sarung polosan bahan premium untuk penampilan bersih dan elegan.', 120000, 165000, 'Halo BANINA, saya tertarik dengan Sarung Polosan Eksklusif. Bisa info lebih lanjut?', 0, 1),
 (4, 'Celana Bahan Pria Muslim', 'celana-bahan-pria-muslim', 'Celana bahan premium potongan slim fit yang nyaman dan stylish untuk pria muslim.', 175000, 230000, 'Halo BANINA, saya tertarik dengan Celana Bahan Pria Muslim. Bisa info lebih lanjut?', 1, 1),
 (5, 'Sajadah Tebal Anti Slip', 'sajadah-tebal-anti-slip', 'Sajadah tebal berbahan lembut dengan alas anti slip. Nyaman untuk ibadah sehari-hari.', 65000, 95000, 'Halo BANINA, saya tertarik dengan Sajadah Tebal Anti Slip. Bisa info lebih lanjut?', 1, 1);
+
+-- Variant Produk (Ukuran)
+INSERT INTO product_variants (product_id, size, sort_order, is_active) VALUES
+-- Songkok Premium Velvet Hitam (ID 1)
+(1, 'S', 1, 1),
+(1, 'M', 2, 1),
+(1, 'L', 3, 1),
+(1, 'XL', 4, 1),
+-- Songkok Rajut Eksklusif (ID 2)
+(2, 'S', 1, 1),
+(2, 'M', 2, 1),
+(2, 'L', 3, 1),
+(2, 'XL', 4, 1),
+-- Kemeja Koko Lengan Panjang (ID 3)
+(3, 'S', 1, 1),
+(3, 'M', 2, 1),
+(3, 'L', 3, 1),
+(3, 'XL', 4, 1),
+(3, 'XXL', 5, 1),
+-- Kemeja Batik Muslim Modern (ID 4)
+(4, 'S', 1, 1),
+(4, 'M', 2, 1),
+(4, 'L', 3, 1),
+(4, 'XL', 4, 1),
+(4, 'XXL', 5, 1),
+-- Sarung Tenun Premium (ID 5)
+(5, 'STANDAR', 1, 1),
+(5, 'PANJANG', 2, 1),
+-- Sarung Polosan Eksklusif (ID 6)
+(6, 'STANDAR', 1, 1),
+(6, 'PANJANG', 2, 1),
+-- Celana Bahan Pria Muslim (ID 7)
+(7, '28', 1, 1),
+(7, '29', 2, 1),
+(7, '30', 3, 1),
+(7, '31', 4, 1),
+(7, '32', 5, 1),
+(7, '33', 6, 1),
+(7, '34', 7, 1),
+-- Sajadah Tebal Anti Slip (ID 8)
+(8, 'STANDAR', 1, 1);
