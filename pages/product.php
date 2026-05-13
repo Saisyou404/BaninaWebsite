@@ -41,7 +41,6 @@ include __DIR__ . '/../includes/header.php';
 ?>
 
 <style>
-/* Size Chart */
 .size-chart-wrap { margin-top: 1.5rem; }
 .size-chart-title {
     display: flex; align-items: center; gap: 0.5rem;
@@ -129,14 +128,12 @@ include __DIR__ . '/../includes/header.php';
 
                 <h1><?= sanitize($product['name']) ?></h1>
 
-                <!-- HARGA TUNGGAL -->
                 <div class="detail-price">
                     <?= formatPrice($product['price_min']) ?>
                 </div>
 
                 <div class="detail-divider"></div>
 
-                <!-- Deskripsi Produk -->
                 <?php if ($product['description']): ?>
                 <div class="detail-section">
                     <h3 class="detail-subtitle">Deskripsi Produk</h3>
@@ -144,37 +141,55 @@ include __DIR__ . '/../includes/header.php';
                 </div>
                 <?php endif; ?>
 
-                <!-- Pilih Ukuran -->
-                <?php if (!empty($variants)): ?>
-                <div class="detail-section">
-                    <h3 class="detail-subtitle">Pilih Ukuran</h3>
-                    <div class="size-options">
-                        <?php foreach ($variants as $variant): ?>
-                        <button class="size-btn" data-size="<?= sanitize($variant['size']) ?>">
-                            <?= sanitize($variant['size']) ?>
-                        </button>
-                        <?php endforeach; ?>
+                <!-- SIZE CHART dari kategori -->
+                <?php
+                $sizeChart = $product['cat_size_chart'] ?? '';
+                $sizes = [];
+                if ($sizeChart) {
+                    foreach (explode("\n", trim($sizeChart)) as $line) {
+                        $parts = array_map('trim', explode('|', $line));
+                        if (count($parts) >= 2) $sizes[] = $parts;
+                    }
+                }
+                ?>
+                <?php if (!empty($sizes)): ?>
+                <div class="size-chart-wrap">
+                    <div class="size-chart-title" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+                        <i class="fas fa-ruler-combined" style="color:var(--gold)"></i>
+                        Tabel Ukuran
+                        <i class="fas fa-chevron-down arrow"></i>
                     </div>
-                    <input type="hidden" id="selectedSize" value="">
-                    <span id="sizeError" style="display:none;color:var(--danger);font-size:0.85rem;margin-top:0.5rem;display:block"></span>
+                    <div class="size-chart-body">
+                        <table class="size-table">
+                            <thead>
+                                <tr>
+                                    <th>Ukuran</th>
+                                    <th>Lingkar Dada</th>
+                                    <th>Panjang Baju</th>
+                                    <th>Lebar Bahu</th>
+                                    <th>Panjang Lengan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($sizes as $row): ?>
+                                <tr>
+                                    <?php foreach ($row as $cell): ?>
+                                    <td><?= sanitize($cell) ?></td>
+                                    <?php endforeach; ?>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <div class="size-note">
+                            <i class="fas fa-info-circle" style="color:var(--gold)"></i>
+                            Ukuran dalam sentimeter (cm). Toleransi ±1-2 cm.
+                        </div>
+                    </div>
                 </div>
                 <?php endif; ?>
 
-                <!-- Jumlah Pembelian -->
-                <div class="detail-section">
-                    <h3 class="detail-subtitle">Jumlah Pembelian</h3>
-                    <div class="quantity-selector">
-                        <button class="qty-btn qty-minus" id="qtyMinus">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <input type="number" id="quantity" value="1" min="1" class="qty-input" readonly>
-                        <button class="qty-btn qty-plus" id="qtyPlus">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <a href="https://id.shp.ee/y9timn2w" class="detail-wa-btn shopee-btn" target="_blank" rel="noopener">
+                <div style="margin-top:1.5rem">
+                    <a href="https://id.shp.ee/y9timn2w" class="detail-wa-btn shopee-btn" target="_blank" rel="noopener">
                         <i class="fas fa-shopping-bag"></i> Beli di Shopee
                     </a>
                 </div>
@@ -221,76 +236,5 @@ include __DIR__ . '/../includes/header.php';
     </div>
 </section>
 <?php endif; ?>
-
-<script>
-// Size Selector
-document.querySelectorAll('.size-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        document.getElementById('selectedSize').value = this.dataset.size;
-        document.getElementById('sizeError').style.display = 'none';
-
-        // Update stock info
-        updateStockInfo(this.dataset.size);
-    });
-});
-
-// Quantity Selector
-const qtyInput = document.getElementById('quantity');
-const qtyPlus = document.getElementById('qtyPlus');
-const qtyMinus = document.getElementById('qtyMinus');
-
-if (qtyPlus && qtyMinus && qtyInput) {
-    qtyPlus.addEventListener('click', (e) => {
-        e.preventDefault();
-        qtyInput.value = parseInt(qtyInput.value) + 1;
-    });
-
-    qtyMinus.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (parseInt(qtyInput.value) > 1) {
-            qtyInput.value = parseInt(qtyInput.value) - 1;
-        }
-    });
-
-    // Allow keyboard input
-    qtyInput.addEventListener('change', function() {
-        if (this.value < 1) this.value = 1;
-    });
-}
-
-// Function to update stock information
-function updateStockInfo(selectedSize) {
-    const stockInfo = document.getElementById('stockInfo');
-    const stockData = {
-        'S': 'Stok tersedia: 15 pcs',
-        'M': 'Stok tersedia: 23 pcs',
-        'L': 'Stok tersedia: 18 pcs',
-        'XL': 'Stok tersedia: 12 pcs',
-        'XXL': 'Stok tersedia: 8 pcs',
-        'STANDAR': 'Stok tersedia: 25 pcs',
-        'PANJANG': 'Stok tersedia: 15 pcs',
-        '28': 'Stok tersedia: 10 pcs',
-        '29': 'Stok tersedia: 12 pcs',
-        '30': 'Stok tersedia: 15 pcs',
-        '31': 'Stok tersedia: 18 pcs',
-        '32': 'Stok tersedia: 20 pcs',
-        '33': 'Stok tersedia: 14 pcs',
-        '34': 'Stok tersedia: 8 pcs'
-    };
-
-    if (stockData[selectedSize]) {
-        stockInfo.innerHTML = '<i class="fas fa-check-circle"></i> ' + stockData[selectedSize];
-        stockInfo.style.color = 'var(--success)';
-        stockInfo.style.opacity = '1';
-    } else {
-        stockInfo.innerHTML = '<i class="fas fa-info-circle"></i> Pilih ukuran untuk melihat ketersediaan stok';
-        stockInfo.style.color = 'var(--text-light)';
-        stockInfo.style.opacity = '0.7';
-    }
-}
-</script>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
