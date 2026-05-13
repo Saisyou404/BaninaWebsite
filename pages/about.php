@@ -4,6 +4,7 @@ include __DIR__ . '/../includes/header.php';
 $siteName = getSetting('site_name');
 $whatsapp = getSetting('whatsapp_number');
 $aboutText = getSetting('about_text');
+$aboutImg = getSetting('about_image');
 ?>
 
 <div class="page-header">
@@ -25,9 +26,14 @@ $aboutText = getSetting('about_text');
             </a>
         </div>
         <div class="about-img">
+            <?php if ($aboutImg): ?>
+            <img src="<?= UPLOAD_URL . sanitize($aboutImg) ?>" alt="Tentang BANINA"
+                 style="width:100%;height:420px;object-fit:cover;border-radius:14px;border:1px solid rgba(122,140,42,0.3);box-shadow:0 8px 30px rgba(0,0,0,0.15)">
+            <?php else: ?>
             <div style="background:linear-gradient(135deg,var(--black),var(--black-light));border-radius:14px;height:420px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:5rem;border:1px solid rgba(122,140,42,0.3)">
                 <i class="fas fa-store"></i>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

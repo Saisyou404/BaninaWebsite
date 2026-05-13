@@ -8,7 +8,7 @@ $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fields = [
         'site_name', 'site_tagline', 'site_description', 'whatsapp_number',
-        'whatsapp_greeting', 'address', 'email', 'instagram',
+        'whatsapp_greeting', 'address', 'email', 'instagram', 'facebook',
         'shopee', 'about_text', 'hero_title', 'hero_subtitle'
     ];
     foreach ($fields as $key) {
@@ -23,6 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $logoPath = uploadImage($_FILES['logo'], 'logo/');
         if ($logoPath) {
             $db->prepare("INSERT INTO settings (`key`,value) VALUES ('logo',?) ON DUPLICATE KEY UPDATE value=?")->execute([$logoPath,$logoPath]);
+        }
+    }
+    if (!empty($_FILES['about_image']['tmp_name']) && $_FILES['about_image']['error'] === 0) {
+        $oldAbout = getSetting('about_image');
+        if ($oldAbout) { $f=UPLOAD_PATH.$oldAbout; if(file_exists($f)) unlink($f); }
+        $aboutImgPath = uploadImage($_FILES['about_image'], 'about/');
+        if ($aboutImgPath) {
+            $db->prepare("INSERT INTO settings (`key`,value) VALUES ('about_image',?) ON DUPLICATE KEY UPDATE value=?")->execute([$aboutImgPath,$aboutImgPath]);
         }
     }
     $success = 'Pengaturan berhasil disimpan!';
@@ -54,6 +62,14 @@ require_once __DIR__ . '/../includes/header.php';
                 <div class="form-group">
                     <label>Tentang Kami (Halaman About)</label>
                     <textarea name="about_text" rows="5"><?= sanitize(getSetting('about_text')) ?></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Gambar Halaman Tentang</label>
+                    <?php $aboutImg = getSetting('about_image'); if ($aboutImg): ?>
+                    <img src="<?= UPLOAD_URL . sanitize($aboutImg) ?>" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;display:block;margin-bottom:0.5rem">
+                    <?php endif; ?>
+                    <input type="file" name="about_image" accept="image/*">
+                    <p class="form-hint">Gambar yang ditampilkan di halaman Tentang Kami.</p>
                 </div>
                 <div class="form-group">
                     <label>Logo (Opsional)</label>
@@ -90,6 +106,10 @@ require_once __DIR__ . '/../includes/header.php';
                     <div class="form-group">
                         <label>Instagram</label>
                         <input type="text" name="instagram" value="<?= sanitize(getSetting('instagram')) ?>" placeholder="@banina.fact">
+                    </div>
+                    <div class="form-group">
+                        <label>Facebook</label>
+                        <input type="text" name="facebook" value="<?= sanitize(getSetting('facebook')) ?>">
                     </div>
                     <div class="form-group">
                         <label>Link Shopee</label>
