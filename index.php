@@ -136,7 +136,10 @@ include __DIR__ . '/includes/header.php';
 .hero-slide-elegant.active .hero-title-elegant { opacity: 1; transform: translateY(0); }
 .hero-title-elegant em {
     font-style: italic;
-    color: var(--gold-light);
+    background: linear-gradient(135deg, #8f9aaa 0%, #c0c0c0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     display: block;
 }
 
@@ -643,27 +646,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const popup = document.getElementById('popup-banner');
     const closeBtn = document.getElementById('close-popup');
 
-    if (popup) {
-        // Hanya tampilkan jika belum ditutup di sesi ini
-        if (!sessionStorage.getItem('popup_closed')) {
-            setTimeout(function() {
-                popup.classList.add('show');
-            }, 1000);
-        }
+    if (!popup) return;
 
-        function closePopup() {
-            popup.classList.remove('show');
-            sessionStorage.setItem('popup_closed', '1');
-        }
+    setTimeout(function() {
+        popup.classList.add('show');
+    }, 500);
 
-        // Close popup when X is clicked
-        closeBtn.addEventListener('click', closePopup);
-
-        // Close popup when clicking outside
-        popup.addEventListener('click', function(e) {
-            if (e.target === popup) closePopup();
-        });
+    function closePopup() {
+        popup.classList.remove('show');
     }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closePopup);
+    }
+
+    popup.addEventListener('click', function(e) {
+        if (e.target === popup) closePopup();
+    });
 });
 </script>
 

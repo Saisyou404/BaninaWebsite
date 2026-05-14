@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS categories (
     description TEXT,
     image VARCHAR(255),
     sort_order INT DEFAULT 0,
+    size_chart TEXT,
     is_active TINYINT(1) DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

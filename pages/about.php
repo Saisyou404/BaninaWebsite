@@ -5,6 +5,7 @@ $siteName = getSetting('site_name');
 $whatsapp = getSetting('whatsapp_number');
 $aboutText = getSetting('about_text');
 $aboutImg = getSetting('about_image');
+$shopeeRating = trim(getSetting('shopee_rating')) ?: '4.9';
 ?>
 
 <div class="page-header">
@@ -88,7 +89,7 @@ $aboutImg = getSetting('about_image');
                 <div style="color:rgba(255,255,255,0.6);font-size:0.88rem;margin-top:0.4rem;letter-spacing:0.1em;text-transform:uppercase">Pelanggan Puas</div>
             </div>
             <div class="fade-in">
-                <div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:var(--gold)">⭐ 4.9</div>
+                <div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:var(--gold)">⭐ <?= sanitize($shopeeRating) ?></div>
                 <div style="color:rgba(255,255,255,0.6);font-size:0.88rem;margin-top:0.4rem;letter-spacing:0.1em;text-transform:uppercase">Rating Toko</div>
             </div>
         </div>

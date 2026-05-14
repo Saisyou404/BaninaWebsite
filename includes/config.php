@@ -6,7 +6,7 @@ define('DB_PASS', '');
 define('DB_NAME', 'banina_store');
 
 // Konfigurasi Aplikasi
-define('SITE_URL', 'http://localhost/banina-website');
+define('SITE_URL', 'http://localhost/BaninaWebsite');
 define('UPLOAD_PATH', __DIR__ . '/../assets/images/uploads/');
 define('UPLOAD_URL', SITE_URL . '/assets/images/uploads/');
 
@@ -24,11 +24,23 @@ function getDB() {
                     PDO::ATTR_EMULATE_PREPARES => false,
                 ]
             );
+            ensureCategorySizeChartColumn($pdo);
         } catch (PDOException $e) {
             die("Koneksi database gagal: " . $e->getMessage());
         }
     }
     return $pdo;
+}
+
+function ensureCategorySizeChartColumn(PDO $db) {
+    try {
+        $stmt = $db->query("SHOW COLUMNS FROM categories LIKE 'size_chart'");
+        if (!$stmt->fetch()) {
+            $db->exec("ALTER TABLE categories ADD COLUMN size_chart TEXT NULL AFTER sort_order");
+        }
+    } catch (PDOException $e) {
+        // Jika tabel categories belum ada atau DB gagal, biarkan halaman lain menangani error.
+    }
 }
 
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
